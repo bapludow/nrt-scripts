@@ -7,7 +7,6 @@ RUN pip install -U pip
 
 # install application libraries
 RUN apt-get install -y gdal-bin libgdal-dev
-RUN pip install earthengine-api google-cloud-storage
 
 # set name
 ARG NAME=nrt-script
@@ -17,11 +16,11 @@ ENV NAME ${NAME}
 RUN mkdir -p /opt/$NAME/data
 WORKDIR /opt/$NAME/
 COPY contents/ .
-COPY credentials.json .
-VOLUME /opt/$NAME/data
+RUN pip install -e git+https://github.com/fgassert/eeUtil#egg=eeUtil
 
-RUN useradd $NAME
-RUN chown -R $NAME:$NAME .
+RUN useradd -r $NAME
+RUN chown -R $NAME:$NAME /opt/$NAME
+VOLUME /opt/$NAME/data
 USER $NAME
 
 CMD ["python", "main.py"]
