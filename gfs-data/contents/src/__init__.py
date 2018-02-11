@@ -51,7 +51,7 @@ EE_COLLECTION = 'gfs'
 EE_ASSET = 'gfs_{date}{hr}'
 GS_FOLDER = 'gfs'
 
-MAX_ASSETS = 2
+MAX_ASSETS = 120
 DATE_FORMAT = '%Y%m%d'
 TIME_FORMAT = '%Y%m%d%H'
 HOURS = ('00', '06', '12', '18')
