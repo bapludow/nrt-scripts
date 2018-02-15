@@ -98,13 +98,13 @@ def convert(files):
     tifs = []
     for f in files:
         tif = os.path.join(DATA_DIR, '{}.tif'.format(getTime(f)))
-        cmd = ['gdal_translate', '-of', 'Gtiff', '-a_srs', 'EPSG:4326',
-               '-a_ullr', '-180', '90', '180', '-90']
+        logging.debug('Converting {} to {}'.format(f, tif))
+        cmd = ['gdal_translate', '-of', 'GTiff']
         for v in VARIABLES:
             cmd += ['-b', BANDS[v]]
         cmd += [f, tif]
-        logging.debug('Converting {} to {}'.format(f, tif))
         subprocess.call(cmd)
+        # HOW TO WRAP 0:360 to -180:180?
         tifs.append(tif)
     return tifs
 
@@ -128,12 +128,12 @@ def fetch(times):
 def processNewData(existing_dates):
     '''fetch, process, upload, and clean new data'''
     # 1. Determine which files to fetch
-    #new_dates = getNewTimes(existing_dates)
+    new_dates = getNewTimes(existing_dates)
     new_dates = ['2018021018']
 
     # 2. Fetch new files
     logging.info('Fetching files')
-    files = fetch(new_dates)
+    #files = fetch(new_dates)
     files = [os.path.join(DATA_DIR, d) for d in new_dates]
 
     if files:
@@ -154,8 +154,8 @@ def processNewData(existing_dates):
         logging.info('Cleaning local files')
         for tif in tifs:
             os.remove(tif)
-        for f in files:
-            os.remove(f)
+        #for f in files:
+        #    os.remove(f)
 
         return assets
     return []
